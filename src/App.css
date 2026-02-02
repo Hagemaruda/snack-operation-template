@@ -1,8 +1,9 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100%;       /* 追加：親を100%にする */
+  margin: 0;         /* 修正：0 auto から 0 に */
+  padding: 0;        /* 修正：2rem から 0 に（余白はHome.tsx側で制御する） */
   text-align: center;
+  /* max-width: 1280px; ← これをコメントアウトまたは削除！ */
 }
 
 .logo {
@@ -39,4 +40,16 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* ブラウザが勝手につける余白を全て消す */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* 横揺れ防止 */
+}
+
+/* ついでに全ての要素のサイズ計算を分かりやすくする */
+* {
+  box-sizing: border-box;
 }

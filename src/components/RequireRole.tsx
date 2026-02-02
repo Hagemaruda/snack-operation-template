@@ -1,37 +1,40 @@
-import { useContext, useEffect } from "react";
-import { EmployeeContext } from "../context/EmployeeContext";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import type { Employee } from "../types/Employee";
+import { usePermittionContext } from "../context/PermittionContext";
+import type { Role } from "../constants/roles";
 
 export default function RequireRole({
   children,
   allowedRoles,
 }: {
   children: React.ReactNode;
-  allowedRoles: Employee["role"][];
+  allowedRoles: Role[];
 }) {
-  const { employee } = useContext(EmployeeContext);
+  const { permittion: attribute } = usePermittionContext();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!employee) return;
+    // 1. まだデータがロードされていない場合は何もしない
+    if (!attribute) return;
 
-    if (!employee.enable) {
-      console.error("システム使用権限がありません:", employee.uid);
+    // 2. 有効フラグがオフならホームへ（RouteConfig側でもガードしてるけど念のため）
+    if (!attribute.enable) {
       alert("システム使用権限がありません");
-      navigate("/home", { replace: true });
+      navigate("/issue", { replace: true });
       return;
     }
 
-    if (!allowedRoles.includes(employee.role)) {
-      console.error("権限のない画面アクセスを検知:", employee.uid, employee.role);
+    // 3. 権限（ロール）チェック
+    if (!allowedRoles.includes(attribute.role)) {
+      console.error("権限不足:", attribute.role);
       alert("この画面を開く権限がありません");
       navigate("/home", { replace: true });
     }
-  }, [employee, allowedRoles, navigate]);
+  }, [attribute, allowedRoles, navigate]);
 
-  if (!employee || !employee.enable || !allowedRoles.includes(employee.role)) {
-    return null; // まだ判断中 or アクセス不可
+  // 判定中や権限不足の間は何も表示しない（チラつき防止）
+  if (!attribute || !attribute.enable || !allowedRoles.includes(attribute.role)) {
+    return null; 
   }
 
   return <>{children}</>;

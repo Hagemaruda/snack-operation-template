@@ -24,10 +24,11 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  /* display: flex;         ← 削除：横に広がるのを邪魔します */
+  /* place-items: center;  ← 削除 */
   min-width: 320px;
   min-height: 100vh;
+  width: 100%;             /* 追加 */
 }
 
 h1 {
@@ -65,4 +66,39 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+/* カレンダーの文字色を強制的に黒にする（デバッグ用） */
+.react-calendar {
+  background-color: white !important;
+  color: #333 !important;
+  border-radius: 8px;
+  border: 1px solid #ccc !important;
+  padding: 10px;
+}
+
+/* 曜日の文字色 */
+.react-calendar__month-view__weekdays {
+  color: #666 !important;
+  font-weight: bold;
+}
+
+/* 日付の数字 */
+.react-calendar__tile {
+  color: #333 !important;
+}
+
+/* 選択された日の色を調整 */
+.react-calendar__tile--active {
+  background: #007bff !important;
+  color: white !important;
+}
+
+/* 月移動のナビゲーションボタン */
+.react-calendar__navigation button {
+  color: #007bff !important;
+  min-width: 44px;
+  background: none;
+  font-size: 16px;
+  margin-top: 8px;
 }
